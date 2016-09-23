@@ -3,3 +3,6 @@
 
 #Ignore save files
 *.*~
+
+#Ignore tars
+*.tar.gz
