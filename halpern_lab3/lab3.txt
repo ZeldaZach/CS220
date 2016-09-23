@@ -1,0 +1,38 @@
+Secrets
+Secret 1: 0xdeadbeef
+Secret 2: 0xdeadc0de
+Secret 3: 0xbadc0de5
+Secret 4: 0xbadbeef5
+
+gfoo Addr: 0x400564 + 0x200ad6 = 0x60103a
+sfoo Addr: 0x400543 + 0x200afb = 0x60103e
+lfoo Addr: 0x7fffffffea20 + -0xc = 0x7fffffffea14
+dfoo Addr: 0x602010 + - 0x8 = 0x602008
+
+dfoo value: 0xbadc0de5
+
+Stack: 0x7ffffffde000 to 0x7ffffffff000
+Heap: 0x602000 to 0x623000
+Data: 0x400000 to 0x602000
+
+Global Variable
+Binary Size @ x=10: 6.7kb
+Binary Size @ x=100: 6.8kb
+Binary Size @ x=1000: 7.7kb
+Binary Size @ x=10000: 19.0kb
+
+Malloc Variable
+Binary Size @ x=10: 6.7kb
+Binary Size @ x=100: 6.7kb
+Binary Size @ x=1000: 6.7kb
+Binary Size @ x=10000: 6.7kb
+
+Limits of Dynamic:
+4 gigabites
+[Heap] 0x601000 to 0x17e2524000 SIZE: 0xe1f23000
+
+Limits of Stack:
+x=10: 0x7ffffffde000 to 0x7ffffffff000
+x=100: 0x7ffffffde000 to 0x7ffffffff000
+x=1000: 0x7ffffffde000 to 0x7ffffffff000
+x=10000: 0x7ffffffde000 to 0x7ffffffff000

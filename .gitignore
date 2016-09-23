@@ -1,0 +1,5 @@
+#Ignore Binaries
+*.o
+
+#Ignore save files
+*.*~

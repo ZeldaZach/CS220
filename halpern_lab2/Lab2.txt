@@ -1,0 +1,23 @@
+Zachary Halpern
+
+Loop Count Per Second:
+For: 3.23*10^8
+While: 4.72*10^8
+Do While: 4.73*10^8
+
+Time To Run 1000000000 Loop (In Seconds):
+For: 3.45, 3.01, 2.82 AVG = 3.0933
+While: 2.10, 2.14, 2.11 AVG = 2.1167
+Do While: 2.11, 2.12, 2.11 AVG = 2.1133
+
+Number of Instructions:
+For: 11
+While: 9
+Do While: 8
+
+$ ldd ./loop
+linux-vdso.so.1 =>  (0x00007fff48ed1000)
+libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fc23684d000)
+/lib64/ld-linux-x86-64.so.2 (0x00007fc236bda000)
+
+The while and do while loops run faster then the for loop because they have fewer instructions to cover. The more instructions you have to execute, the slower your program will be. The do while loop runs slightly faster (on average) over the while loop because of it having 1 less instruction. 
