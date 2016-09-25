@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "secret.h"
 
 unsigned int extract_secret(struct secret_keeper *);
@@ -15,8 +16,14 @@ int main()
 
 unsigned int extract_secret(struct secret_keeper *k)
 {
-	/* Your implementation goes here */
+	int i;
+	union secret *s = k->ptr; /* The secret is hidden in layers of pointers. Start at the K's pointer */
 
-	return 0;
+	/* Now, we will keep going down in the pointer levels until we hit the secret */
+	for (i = 1; i < k->count; i++)
+		s = s->ptr;
+	
+	/* Secret is in this layer, just return it now */
+	return 	s->secret;
 }
 

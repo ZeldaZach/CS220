@@ -2,3 +2,5 @@ p1 can be altered
 p2 can be altered
 *p1 can NOT be altered
 *p2 can NOT be altered
+
+When changing the contents of main to include *ptr = 0; we get a seg fault because we're trying to access memory that's not within our scope and we do not have the permissions to view it.

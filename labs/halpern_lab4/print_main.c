@@ -2,13 +2,14 @@
 
 int main()
 {
-	unsigned char *main;
-	unsigned char *ptr = &main;
+	unsigned char *ptr = (unsigned char *) &main;
+
+	*ptr = 0;
 
 	do
 	{
-		printf("%p %x\n", &ptr, ptr);
-		(main)++;
+		printf("%x \n", *ptr);
+		(ptr)++;
 	}
 	while ( *ptr != 0xc3 );
 

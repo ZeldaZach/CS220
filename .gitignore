@@ -6,3 +6,6 @@
 
 #Ignore tars
 *.tar.gz
+
+#Ignore macs
+.DS_Store
