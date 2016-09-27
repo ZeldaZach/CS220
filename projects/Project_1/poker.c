@@ -67,7 +67,6 @@ int is_flush(struct player *p)
 	{
 		retVal = 1;
 	}
-	
 
 	return retVal;
 }

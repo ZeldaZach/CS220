@@ -7,8 +7,8 @@
  * Define the Value and Suit enumerators
  */
 
-enum Value {HEART, DIAMOND, SPADE, CLUB};
-enum Suit {TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING, ACE};
+enum Suit {HEART, DIAMOND, SPADE, CLUB};
+enum Value {TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING, ACE};
 
 struct card {
 	enum Value val;
