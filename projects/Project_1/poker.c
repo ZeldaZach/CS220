@@ -231,15 +231,15 @@ void compare_hands(FILE *fp)
 		
 		if (P1.vector > P2.vector)
 		{
-			fprintf(fw, "%s", "Player 1 wins\n");
+			fprintf(fw, "%s\n", "Player 1 wins");
 		}
 		else if (P1.vector < P2.vector)
 		{
-			fprintf(fw, "%s", "Player 2 wins\n");
+			fprintf(fw, "%s\n", "Player 2 wins");
 		}
 		else /* They are equal, which breaks the test case rule..... */
 		{
-			fprintf(fw, "%s", "IT'S A TIE!!!\n");
+			fprintf(fw, "%s\n", "IT'S A TIE!!!");
 		}
 	}
 	
