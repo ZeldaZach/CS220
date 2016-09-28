@@ -45,13 +45,13 @@ struct card parse(const char *card)
 /* Count the number of occurrences of each card 2 through Ace */
 void count_cards(struct player *p)
 {
-	/* TASK 13:  
+	/* TASK 13:
 	 * Iterate through the cards and increment the counter for each card
 	 */
 	 int i = 0;
 
 	 for (i = 0; i < 5; i++)
-	 	p->card_count[(int)(p->cards[i].val)]++;	 
+	 	p->card_count[(int)(p->cards[i].val)]++;
 }
 
 int is_flush(struct player *p)
@@ -75,15 +75,15 @@ int is_straight(struct player *p)
 {
 	int retVal = 0, i = 0;
 	/* NOTE: By this stage, the vector must be constructed.
-	 * 
+	 *
 	 * The hand is a straight, if the cards are sequential.
-	 * A2345 as well as TJQKA are both valid straights, and Ace 
+	 * A2345 as well as TJQKA are both valid straights, and Ace
 	 * assumes the value of 1 or 13, but not both.
 	 */
 
 	/* TASK 11: Check for regular straights
  	 * Hint: If this is a straight, player's card_count for i, i+1, i+2, i+3 and i+4 should be 1. */
-	
+
 	 for (i = 0; i < 13; i++)
 	 {
 	 	/* Only looking at bits 0->13 (2, 3, 4, 5, 6, 7, 8, 9, T, J, Q, K, A)
@@ -96,7 +96,7 @@ int is_straight(struct player *p)
 	 		(p->vector & (1 << ((i+4)%13)))
 	 	    )
 	 	{
-	 		retVal = 1; /*p->vector |= (1UL << 39); /* Straight = true*/
+	 		retVal = 1; /* Straight = true*/
 			break;
 	 	}
 	 }
@@ -120,7 +120,7 @@ int is_straight_flush(struct player *p)
 	/* TASK 9: Detect straight flush. A straight flush is nothing but a straight and a flush */
 	return (is_straight(p) && is_flush(p));
 }
-		
+
 /* This is the main function that converts the player's hand into weighted unsigned long number. 
 It is a 55bit vector as shown below (2 is the LSB and StraightFlush is the MSB) */
 /* 2, 3, 4, 5, 6, 7, 8, 9, T, J, Q, K, A, 22, 33, 44, 55, 66, 77, 88, 99, TT, JJ, QQ, KK, AA,
@@ -150,7 +150,7 @@ void eval_strength(struct player *p)
 	for (i = 0; i < 13; i++)
 	{
 		if (p->card_count[i] == 1)
-		{	
+		{
 			/* This will set the vector's bits for single card correctly (0->12) */
 			p->vector |= (1UL << i);
 		}
@@ -175,7 +175,6 @@ void eval_strength(struct player *p)
 			straight_or_flush_possible = 0;
 		}
 	}
-	
 
 	/* TASK 8:
 	 * Check if this is a straight, flush or a straight flush, and set the appropriate bit in the vector.
@@ -190,19 +189,18 @@ void eval_strength(struct player *p)
 	 {
 	 	p->vector |= (1UL << 40);
 	 }
-	 
+
 	 /* EXTRA: Full House needs its own bit vector, so we're doing 56 bits */
 	 if (has_three_of_kind && has_pair)
 	 {
 	 	p->vector |= (1UL << 41); /* Full House = True */
-	 }			 
+	 }
 
 	 if (is_straight_flush(p))
 	 {
 	 	/* Straight and Flush are both true */
 	 	p->vector |= (1UL << 56);
 	 }
-
 }
 
 /* Parse each hand in the input file, evaluate the strengths of hands and identify a winner by comparing the weighted vectors */
@@ -213,8 +211,8 @@ void compare_hands(FILE *fp)
 	int i;
 	FILE *fw = fopen("Output.txt", "w");
 
-	while(fscanf(fp, "%s %s %s %s %s %s %s %s %s %s", 
-		&p1[0][0], &p1[1][0], &p1[2][0], &p1[3][0], &p1[4][0], 
+	while(fscanf(fp, "%s %s %s %s %s %s %s %s %s %s",
+		&p1[0][0], &p1[1][0], &p1[2][0], &p1[3][0], &p1[4][0],
 		&p2[0][0], &p2[1][0], &p2[2][0], &p2[3][0], &p2[4][0]) == 10){
 		memset(&P1, 0, sizeof(struct player));
 		memset(&P2, 0, sizeof(struct player));
@@ -222,13 +220,12 @@ void compare_hands(FILE *fp)
 			P1.cards[i] = parse(&p1[i][0]);
 			P2.cards[i] = parse(&p2[i][0]);
 		}
-		
+
 		/* TASK 4: Invoke eval_strength for each player */
 		eval_strength(&P1);
 		eval_strength(&P2);
-		
+
 		/* TASK 5: Report the winner (e.g., "Player 1 wins") depending on whoever has the higher vector */
-		
 		if (P1.vector > P2.vector)
 		{
 			fprintf(fw, "%s\n", "Player 1 wins");
@@ -242,17 +239,15 @@ void compare_hands(FILE *fp)
 			fprintf(fw, "%s\n", "IT'S A TIE!!!");
 		}
 	}
-	
+
 	fclose(fw);
 	fclose(fp);
 }
 
 int main(int argc, char *argv[])
 {
-	FILE *fp;
-
 	/* TASK 2: Validate command line arguments and try to open the file. Exit on failure. */
-
+	FILE *fp;
 	fp = fopen(argv[1], "r");
 
 	if (argc != 2 || !fp)
@@ -266,4 +261,3 @@ int main(int argc, char *argv[])
 
 	return 0;
 }
-	
