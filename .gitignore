@@ -10,3 +10,5 @@
 #Ignore macs
 .DS_Store
 
+#Ignore PDFs
+*.pdf
