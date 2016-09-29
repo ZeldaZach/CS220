@@ -4,12 +4,14 @@
 
 
 
-struct Point{
+struct _Point{
 	float x;
 	float y;
 	float z;
-	struct Point *next;
+	struct _Point *next;
 };
+
+typedef struct _Point Point;
 
 
 int contains_loop(Point *p);
