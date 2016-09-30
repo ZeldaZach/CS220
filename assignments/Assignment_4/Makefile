@@ -1,7 +1,7 @@
-all: point
+all: driver
 
-point:
-	gcc point.c -o point.o -std=c89 -g
+driver:
+	gcc point.c driver.o -g -std=c89 -o main.o
 	
 clean:
 	rm point.o
