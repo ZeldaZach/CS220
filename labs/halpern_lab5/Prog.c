@@ -3,14 +3,14 @@
 
 void bad(int dummy)
 {	
-	int age = 11;
-	int *ptr = &age;
-	int i;
-	
-	ptr -= 0x24;
-	printf("Ptr: %p\n", ptr);
-	
-	
+	char *newName = "Quick brown fox jumped over the lazy dog";
+	int newAge = 1000;
+
+	char *n_ptr = (char *)(&newName + 0x5);
+	int *a_ptr = (int *)(&newAge + 0xD);
+
+	*n_ptr = newName;
+	*a_ptr = newAge;
 }
 
 int main()
@@ -22,12 +22,7 @@ int main()
 		.name = "John",
 		.age = 22
 	};
-	
-	printf("Real Age: %p\n", &student.age);
-	
 	bad(sizeof(student));
-	
-	printf("student.name = %s\nstudent.age = %d\n", student.name, student.age);
-	
+	printf("student.name = %s\nstudent.age = %d\n", student.name, student.age);	
 	return 0;
 }
