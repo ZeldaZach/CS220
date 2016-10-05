@@ -3,7 +3,7 @@
 int main()
 {
 	const int *p1;
-	int const *p2;
+	int * const p2;
 
 	printf("Initial *p1.address= %p *p1.value= %x\n", &p1, p1);
 	printf("Initial *p2.address= %p *p2.value= %x\n", &p2, p2);
