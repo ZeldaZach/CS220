@@ -1,7 +1,7 @@
 all: node
 
 node:
-	gcc main.c -std=c89 -g -o main.o
+	gcc zhalper3_assn5.c driver.o -std=c89 -g -o main.o
 
 clean:
 	rm main.o

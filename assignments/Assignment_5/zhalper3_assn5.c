@@ -1,34 +1,52 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "main.h"
+#include "zhalper3_assn5.h"
+
+MyNode *extract_new_list(Node *head)
+{
+	return (MyNode *)&(head->ptr);
+}
+
+/* Testing
+void my_print_list(Node *t)
+{
+	while (t)
+	{
+		printf("%d\n", t->val.n);
+		t = head_of_node(t->ptr);
+	}
+}*/
+
+Node* head_of_node(void *ptr)
+{
+	Node tmp;
+	int offset = (unsigned char *)&(tmp.ptr) - (unsigned char *)&tmp;
+	
+	if (!ptr)
+		return NULL;
+	
+	return (Node *)((unsigned char *)ptr - offset);
+}
+
 
 Node *my_reverse(Node *head)
 {
-	Node *new_start = malloc(sizeof(Node));
-	Node *current, *previous, *next;
-	new_start = head;
-
-	while (head->ptr != NULL)
-	{
-		new_start->ptr = malloc(sizeof(Node));
-		head = head_of_node(head->ptr);
-		new_start = head;
-	}
-
-	/* Now to swap the order of the node list */
-	current = new_start->ptr->ptr
-
-	return head;
-}
-
-Node *head_of_node(void *ptr)
-{
-	ptr = &ptr - 0x4;
+	MyNode *new_head = extract_new_list(head); /* Move the Node head to a MyNode head */	
+	MyNode *currentNode, *previousNode, *nextNode;
 	
-	return ptr;
+	/* Reversal of linkedlist taken from http://algorithms.tutorialhorizon.com/reverse-a-linked-list/ */
+	currentNode = new_head;
+	nextNode = NULL;
+	previousNode = NULL;
+	
+	while (currentNode != NULL)
+	{
+		nextNode = currentNode->next;
+		currentNode->next = previousNode;
+		previousNode = currentNode;
+		currentNode = nextNode;
+	}
+	
+	return head_of_node(previousNode);
 }
 
-int main()
-{
-	return 0;
-}
