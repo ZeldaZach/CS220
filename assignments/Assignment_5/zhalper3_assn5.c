@@ -39,7 +39,7 @@ Node *my_reverse(Node *head)
 	nextNode = NULL;
 	previousNode = NULL;
 	
-	while (currentNode != NULL)
+	while (currentNode)
 	{
 		nextNode = currentNode->next;
 		currentNode->next = previousNode;
