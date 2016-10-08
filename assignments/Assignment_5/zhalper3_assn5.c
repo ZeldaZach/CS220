@@ -7,7 +7,6 @@ MyNode *extract_new_list(Node *head)
 	return (MyNode *)&(head->ptr);
 }
 
-/* Testing
 void my_print_list(Node *t)
 {
 	while (t)
@@ -15,7 +14,7 @@ void my_print_list(Node *t)
 		printf("%d\n", t->val.n);
 		t = head_of_node(t->ptr);
 	}
-}*/
+}
 
 Node* head_of_node(void *ptr)
 {
@@ -46,7 +45,8 @@ Node *my_reverse(Node *head)
 		previousNode = currentNode;
 		currentNode = nextNode;
 	}
-	
+
+	my_print_list(head_of_node(previousNode));	
 	return head_of_node(previousNode);
 }
 
