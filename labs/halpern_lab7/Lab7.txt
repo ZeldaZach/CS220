@@ -1,0 +1,26 @@
+OUTPUT main_static:
+Allocation 40 bytes...
+Successfully allocated at 0x1b5a010
+free()ing memory at 0x1b5a010...DONE
+
+ADDRESS logger_malloc:
+000000000040062b
+
+ADDRESS logger_free:
+000000000040068e
+
+OUTPUT main_shared:
+Allocation 40 bytes...
+Successfully allocated at 0x707010
+free()ing memory at 0x707010...DONE
+
+OUTPUT ldd main_shared:
+linux-vdso.so.1 (0x00007ffd708e9000)
+libshared.so => /home/zhalper3/cs220/labs/halpern_lab7/lib/libshared.so (0x00007fb925f72000)
+libc.so.6 => /import/linux/home/zhalper3/.linuxbrew/lib/libc.so.6 (0x00007fb925bf9000)
+/import/linux/home/zhalper3/.linuxbrew/lib/ld.so (0x00007fb926174000)
+
+OUTPUT ldd main_static:
+linux-vdso.so.1 (0x00007ffcdd5a8000)
+libc.so.6 => /import/linux/home/zhalper3/.linuxbrew/lib/libc.so.6 (0x00007f9a5f8a8000)
+/import/linux/home/zhalper3/.linuxbrew/lib/ld.so (0x00007f9a5fc21000)
