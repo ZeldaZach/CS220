@@ -7,6 +7,9 @@
 # Unignore directories
 !*/
 
+# Unignore makefiles
+Makefile
+
 # Ignore Binaries
 *.o
 
