@@ -1,26 +1,21 @@
-OUTPUT main_static:
+$ ./main_static
 Allocation 40 bytes...
-Successfully allocated at 0x1b5a010
-free()ing memory at 0x1b5a010...DONE
+Successfully allocated at 0x1ac3010
+free()ing memory at 0x1ac3010...DONE
 
-ADDRESS logger_malloc:
-000000000040062b
+logger_malloc address: 000000000040062b
+logger_free address: 0000000000400688
 
-ADDRESS logger_free:
-000000000040068e
+$ ./main_shared
+./main_shared: error while loading shared libraries: libshared.so: cannot open shared object file: No such file or directory
 
-OUTPUT main_shared:
-Allocation 40 bytes...
-Successfully allocated at 0x707010
-free()ing memory at 0x707010...DONE
+$ ldd main_shared
+linux-vdso.so.1 (0x00007ffde0741000)
+libshared.so => /home/zhalper3/cs220/labs/halpern_lab7_1/lib/libshared.so (0x00007ffb0c4a0000)
+libc.so.6 => /import/linux/home/zhalper3/.linuxbrew/lib/libc.so.6 (0x00007ffb0c127000)
+/import/linux/home/zhalper3/.linuxbrew/lib/ld.so (0x00007ffb0c6a2000)
 
-OUTPUT ldd main_shared:
-linux-vdso.so.1 (0x00007ffd708e9000)
-libshared.so => /home/zhalper3/cs220/labs/halpern_lab7/lib/libshared.so (0x00007fb925f72000)
-libc.so.6 => /import/linux/home/zhalper3/.linuxbrew/lib/libc.so.6 (0x00007fb925bf9000)
-/import/linux/home/zhalper3/.linuxbrew/lib/ld.so (0x00007fb926174000)
-
-OUTPUT ldd main_static:
-linux-vdso.so.1 (0x00007ffcdd5a8000)
-libc.so.6 => /import/linux/home/zhalper3/.linuxbrew/lib/libc.so.6 (0x00007f9a5f8a8000)
-/import/linux/home/zhalper3/.linuxbrew/lib/ld.so (0x00007f9a5fc21000)
+$ ldd main_static
+linux-vdso.so.1 (0x00007fff17569000)
+libc.so.6 => /import/linux/home/zhalper3/.linuxbrew/lib/libc.so.6 (0x00007ff7d5e92000)
+/import/linux/home/zhalper3/.linuxbrew/lib/ld.so (0x00007ff7d620b000)
