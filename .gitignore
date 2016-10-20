@@ -1,3 +1,12 @@
+# Ignore all
+*
+
+# Unignore all w/ extensions
+!*.*
+
+# Unignore directories
+!*/
+
 #Ignore Binaries
 *.o
 
