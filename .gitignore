@@ -7,17 +7,20 @@
 # Unignore directories
 !*/
 
-#Ignore Binaries
+# Ignore Binaries
 *.o
 
-#Ignore save files
+# Ignore save files
 *.*~
 
-#Ignore tars
+# Ignore tars
 *.tar.gz
 
-#Ignore macs
+# Ignore macs
 .DS_Store
 
-#Ignore PDFs
+# Ignore PDFs
 *.pdf
+
+# Ignore disas
+*.disas
