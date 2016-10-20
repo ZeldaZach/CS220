@@ -8,7 +8,7 @@
 !*/
 
 # Unignore makefiles
-Makefile
+!Makefile
 
 # Ignore Binaries
 *.o
