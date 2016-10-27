@@ -1,0 +1,31 @@
+STEP_SIZE 4
+HDD ACCESS:  28 sec, 437173 micro sec
+
+STEP_SIZE 32
+HDD ACCESS:  3 sec, 583899 micro sec
+
+STEP_SIZE 128
+HDD ACCESS:  1 sec, 255445 micro sec
+
+STEP_SIZE 1024
+HDD ACCESS:  0 sec, 268503 micro sec
+
+NG 1
+MEM SERIAL ACCESS:  0 sec, 008135 micro sec
+MEM PAGE STEP ACCESS:  0 sec, 026232 micro sec
+page-faults 262959
+
+NG 4
+MEM SERIAL ACCESS:  0 sec, 032915 micro sec
+MEM PAGE STEP ACCESS:  0 sec, 142764 micro sec
+page-faults 265264
+
+NG 32
+MEM SERIAL ACCESS:  0 sec, 270921 micro sec
+MEM PAGE STEP ACCESS:  1 sec, 008450 micro sec
+page-faults 286782
+
+NG 128
+MEM SERIAL ACCESS:  0 sec, 927929 micro sec
+MEM PAGE STEP ACCESS:  2 sec, 471216 micro sec
+page-faults 360558
