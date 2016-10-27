@@ -1,0 +1,67 @@
+NUM_NODES = 10
+ASM:  0 sec, 000000 micro sec
+C:  0 sec, 000001 micro sec
+
+NUM_NODES = 100
+ASM:  0 sec, 000001 micro sec
+C:  0 sec, 000002 micro sec
+
+NUM_NODES = 1000
+ASM:  0 sec, 000005 micro sec
+C:  0 sec, 000013 micro sec
+
+NUM_NODES = 10000
+ASM:  0 sec, 000045 micro sec
+C:  0 sec, 000156 micro sec
+
+NUM_NODES = 100000
+ASM:  0 sec, 000214 micro sec
+C:  0 sec, 000541 micro sec
+
+NUM_NODES = 1000000
+ASM:  0 sec, 005857 micro sec
+C:  0 sec, 013690 micro sec
+
+reverse_C has 33 instructions
+reverse_asm has 22 non-NOP instructions
+
+Fewer instructions == quicker execution time
+_______
+
+NUM_NODES = 100
+ASM:  0 sec, 000001 micro sec
+C:  0 sec, 000001 micro sec
+
+NUM_NODES = 1500
+ASM:  0 sec, 000007 micro sec
+C:  0 sec, 000007 micro sec
+
+NUM_NODES = 15000
+ASM:  0 sec, 000070 micro sec
+C:  0 sec, 000071 micro sec
+
+NUM_NODES = 5000000
+ASM:  0 sec, 028993 micro sec
+C:  0 sec, 029088 micro sec
+
+NUM_NODES = 50000000
+ASM:  0 sec, 212858 micro sec
+C:  0 sec, 289393 micro sec
+
+You can make reverse_asm faster through:
+change the "mov eax, 0x0" to an "xor eax, eax"
+change the other zeroing out methods to "xor reg_name, reg_name"
+put edi on the stack and use it as another register, xor'ing it to 0
+
+now when you do the "comp eax, 0" instead do "comp eax, edi" as comparing reg's is faster
+
+finally, in the "while_start" method you can change the "cmp ebx, 0x0" to "cmp ebx, edi"
+_______
+
+Without -O2 flag:
+reverse_asm: 22 instructions
+reverse_c: 33 instructions
+
+With -O2 flag:
+reverse_asm: 23 instructions
+reverse_c: 17 instructions
