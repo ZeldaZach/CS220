@@ -25,36 +25,36 @@ int main()
 	struct timeval tvDiff, tvStart, tvEnd;
 	long long nopANDret = 0, ret = 0;
 	int i, j;
-	
+
 	for (j = 0; j < TOTAL_LOOPS; j++)
 	{
 		/*** Get the NOP + RET times ***/
 		gettimeofday(&tvStart, NULL);
 		for (i = 0; i < TOTAL_TIMES; i++)
 			oneHundredNOP();
-		gettimeofday(&tvEnd, NULL);	
+		gettimeofday(&tvEnd, NULL);
 		timeval_subtract(&tvDiff, &tvEnd, &tvStart);
 		/*timeval_print("\nNOP+RET: ", &tvDiff);*/
-	
+
 		nopANDret += tvDiff.tv_sec*1000000 + tvDiff.tv_usec;
 		/*printf("NopANDret = %llu\n", nopANDret);*/
-	
+
 		/*** Get the RET time ***/
 		gettimeofday(&tvStart, NULL);
 		for (i = 0; i < TOTAL_TIMES; i++)
 			zeroNOP();
-		gettimeofday(&tvEnd, NULL);	
+		gettimeofday(&tvEnd, NULL);
 		timeval_subtract(&tvDiff, &tvEnd, &tvStart);
 		/*timeval_print("RET: ", &tvDiff);*/
-		
+
 		ret += tvDiff.tv_sec*1000000 + tvDiff.tv_usec;
 		/*printf("Ret = %llu\n", ret);*/
 	}
-	
+
 	nopANDret /= TOTAL_LOOPS;
 	ret /= TOTAL_LOOPS;
 
 	printf("Estimate of NOPs per second: %'llu\n", TOTAL_TIMES*100000000LL / (nopANDret - ret) );
-	
-	
+
+
 }
