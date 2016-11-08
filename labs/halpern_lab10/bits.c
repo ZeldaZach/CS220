@@ -85,27 +85,28 @@ unsigned int set_tlb_tag(unsigned int address, unsigned int new_tag)
 int main()
 {
 	struct timeval tvDiff, tvStart, tvEnd;
-	unsigned int address = 0xf712c0d0, page_offset = 0x1a3, tlb_id = 0x0, tlb_tag = 0x8400, new_address = address;
+	unsigned int address = 0xf712c0d0, page_offset = 0x1a3, tlb_id = 0x0, tlb_tag = 0x84, new_address = address;
 	gettimeofday(&tvStart, NULL);
 
 	printf("%-20s", "Address:"); print_in_binary(address);
-	
+
 	/* Test get functions */
 	printf("%-20s", "Page offset:"); print_in_binary(get_page_offset(address));
 	printf("%-20s", "TLB id:"); print_in_binary(get_tlb_id(address));
 	printf("%-20s", "TLB tag:"); print_in_binary(get_tlb_tag(address));
-	
+
 	/* Test set functions */
 	printf("\n%-20s", "Start Address:"); print_in_binary(new_address);
+
 	new_address = set_page_offset(new_address, page_offset);
 	printf("%-20s", "New page offset:"); print_in_binary(get_page_offset(new_address));
 
 	new_address = set_tlb_id(new_address, tlb_id);
 	printf("%-20s", "New TLB id:"); print_in_binary(get_tlb_id(new_address));
-	
+
 	new_address = set_tlb_tag(new_address, tlb_tag);
 	printf("%-20s", "New TLB tag:"); print_in_binary(get_tlb_tag(new_address));
-	
+
 	printf("%-20s", "End Address:");print_in_binary(new_address);
 
 	gettimeofday(&tvEnd, NULL);
