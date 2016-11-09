@@ -1,6 +1,6 @@
-all: yup
+all: thebits
 
-yup:
+thebits:
 	gcc bits.c -std=c89 -g -o bits
 
 clean:
