@@ -14,20 +14,6 @@
 #define BF_GET(y, start, len) ( ((y) >> (start)) & BIT_MASK(len) )
 #define BF_SET(y, x, start, len) ( ((y) &~ BF_MASK(start, len)) | BF_PREP(x, start, len) )
 
-int timeval_subtract(struct timeval *result, struct timeval *t2, struct timeval *t1)
-{
-    long int diff = (t2->tv_usec + 1000000 * t2->tv_sec) - (t1->tv_usec + 1000000 * t1->tv_sec);
-    result->tv_sec = diff / 1000000;
-    result->tv_usec = diff % 1000000;
-
-    return (diff<0);
-}
-
-void timeval_print(char *str, struct timeval *tv)
-{
-    printf("%s %ld sec, %06ld micro sec\n", str, tv->tv_sec, tv->tv_usec);
-}
-
 void print_in_binary(unsigned int x)
 {
 	int i;
@@ -84,9 +70,7 @@ unsigned int set_tlb_tag(unsigned int address, unsigned int new_tag)
 
 int main()
 {
-	struct timeval tvDiff, tvStart, tvEnd;
 	unsigned int address = 0xf712c0d0, page_offset = 0x1a3, tlb_id = 0x0, tlb_tag = 0x84, new_address = address;
-	gettimeofday(&tvStart, NULL);
 
 	printf("%-20s", "Address:"); print_in_binary(address);
 
@@ -108,8 +92,4 @@ int main()
 	printf("%-20s", "New TLB tag:"); print_in_binary(get_tlb_tag(new_address));
 
 	printf("%-20s", "End Address:");print_in_binary(new_address);
-
-	gettimeofday(&tvEnd, NULL);
-	timeval_subtract(&tvDiff, &tvEnd, &tvStart);
-	timeval_print("\nTIME: ", &tvDiff);
 }
