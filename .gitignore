@@ -10,8 +10,8 @@
 # Unignore makefiles
 !Makefile
 
-# Ignore Binaries
-*.o
+# Dont Ignore Binary Objects
+!*.o
 
 # Ignore save files
 *.*~
