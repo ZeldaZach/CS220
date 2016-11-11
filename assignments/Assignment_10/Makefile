@@ -1,7 +1,4 @@
-all: test_macros build_backtrace
-
-test_macros:
-	gcc macros.c -std=c89 -m32 -g -o macros
+all: build_backtrace
 
 build_backtrace:
 	gcc -c -std=c89 -g -m32 -Wall bt.c -fPIC -I$(PWD)
