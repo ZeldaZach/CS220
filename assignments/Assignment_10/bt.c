@@ -38,7 +38,7 @@ void print_backtrace(int count)
 	while (count > 0)
 	{
 		ret_addr = (unsigned int) *(curr_ebp + 0x1);
-		printf("%x\n", ret_addr);
+		printf("0x%x\n", ret_addr);
 
 		/* Start address of main < current addr on stack < end address of main */
 		if ((unsigned int)&main < ret_addr && ret_addr < (unsigned int)&ptr)
