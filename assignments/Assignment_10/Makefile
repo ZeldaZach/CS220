@@ -1,18 +1,16 @@
-all: test_macros test_backtrace build_backtrace
+all: test_macros build_backtrace
 
 test_macros:
-	gcc macros.c -std=c89 -g -o macros
-
-test_backtrace:
-	gcc bt.c btasm.S -std=c89 -g -o bt
+	gcc macros.c -std=c89 -m32 -g -o macros
 
 build_backtrace:
-	gcc -c -std=c89 -g -Wall bt.c btasm.S -fPIC -I$(PWD)
-	ar rcs libbt.a
+	gcc -c -std=c89 -g -m32 -Wall bt.c -fPIC -I$(PWD)
+	ar rcs libbt.a bt.o
 	mkdir -p lib
 	mv libbt.a ./lib
 
-	gcc -shared -Wall bt.c btasm.S -o libbt.so -fPIC
+	gcc -shared -m32 -Wall bt.c btasm.S -o libbt.so -fPIC
 	mv libbt.so ./lib
+
 clean:
-	rm -rf macros bt ./lib bt.o btasm.o
+	rm -rf macros bt ./lib bt.o
