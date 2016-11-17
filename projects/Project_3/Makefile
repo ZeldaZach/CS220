@@ -8,7 +8,7 @@ CC      = gcc
 OPTIONS = -O2 -I$(IMPL) -I$(SIM) # Production options
 #OPTIONS = -O0 -g -I$(IMPL) -I$(SIM) # Debugging Options
 CFLAGS  = $(OPTIONS) -Wall -std=c89 -pedantic -pipe -Werror
-SUBMIT  = $(IMPL) $(SIM) Makefile inputs 
+SUBMIT  = $(IMPL) $(SIM) Makefile inputs
 
 IMPL_OBJS = page-fault.o \
                page-replacement.o \
@@ -78,4 +78,3 @@ $(IMPL)/page-replacement.o: $(SIM)/types.h  $(SIM)/pagetable.h \
                                $(IMPL)/page-replacement.c $(IMPL)/macros.h
 $(IMPL)/tlb-lookup.o: $(IMPL)/tlb-lookup.c  $(SIM)/tlb.h \
                          $(SIM)/pagetable.h $(SIM)/types.h $(IMPL)/macros.h
-

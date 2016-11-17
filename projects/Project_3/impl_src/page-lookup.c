@@ -18,7 +18,14 @@ pfn_t pagetable_lookup(vpn_t vpn, int write) {
     *	      encountered a pagefault. Increment the counter and invoke the pagefault_handler to
     * 	      get the physical page. Finally return the page.
     */
-
+   
+   ret = pagetable_lookup(vpn, write);
+   
+   if (!ret)
+   {
+	   pagefaults_count++;
+	   ret = pagefault_handler(vpn, write);
+   }
 
    return ret;
 }

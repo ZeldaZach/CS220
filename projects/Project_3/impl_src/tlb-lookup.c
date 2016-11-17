@@ -18,6 +18,7 @@
 pfn_t tlb_lookup(vpn_t vpn, int write)
 {
 	pfn_t pfn;
+	int i, evicted;
 
 	pfn = 0;
 	/*
@@ -35,13 +36,60 @@ pfn_t tlb_lookup(vpn_t vpn, int write)
 	 * 	  If this is a write access, also set the dirty bit. 
 	 * 	  We have found the physical page, so we are done. Return the physical page. 
 	 */
+	
+	/* For each entry in the tlb */
+	for (i = 0; i < tlb_size; i++)
+	{
+		/* if valid == true */
+		if (IS_SET(tlb[i].flags, VALID))
+		{
+			/* if tlb->vpn == lookup vpn */
+			if (tlb[i].vpn == vpn)
+			{
+				/* Increment tlbhits since it was a hit */
+				tlbhits_count++;
+
+				/* if write is enabled, set write flag */
+				if (write)
+					SET_BIT(tlb[i].flags, DIRTY);
+
+				/* set used flag */
+				SET_BIT(tlb[i].flags, USED);
+				
+				/* set pfn */
+				pfn = tlb[i].pfn;
+			}
+
+			/* if pfn is not null */
+			if (pfn)
+				return pfn;
+		}
+	}
 
 
 	/* TASK 2b: If it was a TLB miss, call pagetable_lookup to obtain the physical page. */
-
+	pfn = pagetable_lookup(vpn, write);
+	
 	/* TASK 2c: Evict an invalid entry and update the TLB with the new page */
+	evicted = 0;
+	for (i = 0; i < tlb_size; i++)
+	{
+		/* Get the first invalid entry */
+		if (!(IS_SET(tlb[i].flags, VALID)))
+		{
+			tlb_clearone(tlb[i].vpn);
+
+			tlb[i].vpn = vpn;
+			tlb[i].pfn = pfn;
+			SET_BIT(tlb[i].flags, VALID);
+			
+			evicted = 1;
+			break;
+		}
+	}
 	
 	/* TASK 2d: If no invalid entry was found, we must kick out an unused entry */
+
 	/* STEPS: 
 	 * For each entry in the TLB:
 	 *   If the entry is unused:
@@ -51,6 +99,24 @@ pfn_t tlb_lookup(vpn_t vpn, int write)
 	 * 	mark the entry as unused, so we can kick it out the next time it is encountered. This is called performing a clock-sweep, because we are mimicking a movement of time. 
 	 * Repeat the for STEPS till we find a victim entry to kick out. 
 	 */
+	
+	if (!evicted)
+	{
+		for (i = 0; i < tlb_size; i++)
+		{
+			if (!(IS_SET(tlb[i].flags, USED)))
+			{
+				tlb[i].vpn = vpn;
+				tlb[i].pfn = pfn;
+				SET_BIT(tlb[i].flags, USED);
+				SET_BIT(tlb[i].flags, VALID);
+			}
+			else
+			{
+				CLEAR_BIT(tlb[i].flags, VALID);
+			}
+		}
+	}
 
 	return pfn;
 }
