@@ -5,7 +5,7 @@ extern unsigned long *get_ebp();
 
 void ret2libc(int dummy)
 {
-	char *command = "/bin/zsh";
+	char *command = "/bin/bash";
 	long *curr_ebp = get_ebp();
 
 	curr_ebp[2] = curr_ebp[1]; /* Save old ret val */
@@ -26,7 +26,8 @@ void ret2libc_generic(char *cmd)
 int main()
 {
 	ret2libc(0);
-	ret2libc_generic("ls -lah");
+	ret2libc_generic("ls");
+	ret2libc_generic("/bin/bash");
 	printf("Done!\n");
 	return 0;
 }

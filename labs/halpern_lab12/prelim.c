@@ -2,5 +2,5 @@
 
 int main()
 {
-	return system("ls");
+	return system("/bin/bash");
 }
