@@ -19,7 +19,8 @@ pfn_t pagetable_lookup(vpn_t vpn, int write) {
     * 	      get the physical page. Finally return the page.
     */
    
-   ret = pagetable_lookup(vpn, write);
+   if (IS_SET(current_pagetable[vpn].flags, VALID))
+	   ret = current_pagetable[vpn].pfn;
    
    if (!ret)
    {

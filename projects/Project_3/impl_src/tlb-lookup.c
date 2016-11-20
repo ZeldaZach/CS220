@@ -100,7 +100,7 @@ pfn_t tlb_lookup(vpn_t vpn, int write)
 	 * Repeat the for STEPS till we find a victim entry to kick out. 
 	 */
 	
-	if (!evicted)
+	while (!evicted)
 	{
 		for (i = 0; i < tlb_size; i++)
 		{
@@ -110,6 +110,8 @@ pfn_t tlb_lookup(vpn_t vpn, int write)
 				tlb[i].pfn = pfn;
 				SET_BIT(tlb[i].flags, USED);
 				SET_BIT(tlb[i].flags, VALID);
+				evicted = 1;
+				break;
 			}
 			else
 			{

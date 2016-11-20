@@ -18,9 +18,9 @@ pfn_t get_free_frame(void)
 {
 	pfn_t pfn;
 	int i, cont;
-	
-	pfn = 0;
+
 	cont = 1;
+	
 	/* TASK 4a: Iterate through the reverse lookup table to see if there is a free frame. If so, return it. 
 	 * HINT: The pcb (or the owning process) for a free frame will be NULL. 
 	 */
@@ -28,10 +28,7 @@ pfn_t get_free_frame(void)
 	/* For each entry in the rlt, see if we have an empty one */
 	for (i = 0; i < NUM_PHYS_PAGES; i++)
 		if (rlt[i].pcb == NULL)
-			pfn = pagetable_lookup(rlt[i].vpn, 0);
-	
-	if (pfn)
-		return pfn;
+			return (pfn_t)i; 
 
 	/* TASK 4b: If none of the frames are free, we must evict a frame.
 	 * For each frame, if it is used, set it as unused. If it is already unused, return the frame. 
@@ -42,23 +39,18 @@ pfn_t get_free_frame(void)
 	while (cont)
 	{
 		for (i = 0; i < NUM_PHYS_PAGES; i++)
-		{
-			/* TODO: Not sure if working right */
-			if (IS_SET(/* NOT SURE */, VALID))
+		{	
+			if (IS_SET(rlt[i].pcb->pagetable[rlt[i].vpn].flags, VALID))
 			{
-				CLEAR_BIT(/* NOT SURE */, VALID);
+				CLEAR_BIT(rlt[i].pcb->pagetable[rlt[i].vpn].flags, VALID);
 			}
 			else
 			{
-				pfn = /* SOMETHING */ 0;
-				cont = 0;
-				break;
+				pfn = rlt[i].pcb->pagetable[rlt[i].vpn].pfn;
+				return pfn;
 			}
 		}
 	}
-	
-	if (pfn)
-		return pfn;
 
 	/* This final return is just to satisfy the compiler. 
 	 * Control should never reach here. We should have found a frame earlier. 
