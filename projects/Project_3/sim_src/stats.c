@@ -38,7 +38,7 @@ void display_stats() {
          "Writes:        %10lu\n"
          "TLB Hits:      %10lu\n"
          "Page Faults:   %10lu\n"
-	 "Disk IO: %10lu\n\n"
+	 	 "Disk IO: %10lu\n\n"
          "Effective Mean Access Time:          %f ns\n",
          reads_count, writes_count, tlbhits_count, pagefaults_count, 
          diskio_count, compute_access_time());

@@ -40,9 +40,13 @@ pfn_t pagefault_handler(vpn_t request_vpn, int write)
 	if (rlt[victim_pfn].pcb)
 	{
 		if (IS_SET(rlt[victim_pfn].pcb->pagetable[rlt[victim_pfn].vpn].flags, DIRTY))
+		{
 			page_to_disk(victim_pfn, rlt[victim_pfn].vpn, rlt[victim_pfn].pcb->pid);
+			CLEAR_BIT(rlt[victim_pfn].pcb->pagetable[rlt[victim_pfn].vpn].flags, DIRTY);
+		}
 
 		CLEAR_BIT(rlt[victim_pfn].pcb->pagetable[rlt[victim_pfn].vpn].flags, VALID);
+		
 		tlb_clearone(rlt[victim_pfn].vpn);
 	}
 
@@ -59,17 +63,18 @@ pfn_t pagefault_handler(vpn_t request_vpn, int write)
 	 * Hint: page_from_disk()
 	 */
 	rlt[victim_pfn].pcb = current;
-	
+	rlt[victim_pfn].vpn = request_vpn;
+
 	current_pagetable[request_vpn].pfn = victim_pfn;
 
 	SET_BIT(current_pagetable[request_vpn].flags, USED);
 	SET_BIT(current_pagetable[request_vpn].flags, VALID);
 
 	if (write)
-		SET_BIT(rlt[victim_pfn].pcb->pagetable->flags, DIRTY);
+		SET_BIT(current_pagetable[request_vpn].flags, DIRTY);
 
-	page_from_disk(victim_pfn, request_vpn, current->pid);
+	/* WRONG? */
+	page_from_disk(victim_pfn, request_vpn, rlt[victim_pfn].pcb->pid);
 
 	return victim_pfn;
 }
-

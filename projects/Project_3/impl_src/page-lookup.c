@@ -20,7 +20,7 @@ pfn_t pagetable_lookup(vpn_t vpn, int write) {
     * 	      If the entry is valid, return the physical page (or frame). Otherwise, you have 
     *	      encountered a pagefault. Increment the counter and invoke the pagefault_handler to
     * 	      get the physical page. Finally return the page.
-    */   
+    */
 
    if (IS_SET(current_pagetable[vpn].flags, VALID))
    {

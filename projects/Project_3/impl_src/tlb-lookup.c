@@ -18,7 +18,7 @@
 pfn_t tlb_lookup(vpn_t vpn, int write)
 {
 	pfn_t pfn;
-	int i, evicted;
+	int i;
 
 	pfn = 0;
 	/*
@@ -40,9 +40,9 @@ pfn_t tlb_lookup(vpn_t vpn, int write)
 	/* For each entry in the tlb */
 	for (i = 0; i < tlb_size; i++)
 	{
-		/* if valid == true */
-		if (IS_SET(tlb[i].flags, VALID) && tlb[i].vpn == vpn)
+		if (tlb[i].vpn == vpn && IS_SET(tlb[i].flags, VALID))
 		{
+			
 			/* Increment tlbhits since it was a hit */
 			tlbhits_count++;
 
@@ -65,7 +65,6 @@ pfn_t tlb_lookup(vpn_t vpn, int write)
 	pfn = pagetable_lookup(vpn, write);
 	
 	/* TASK 2c: Evict an invalid entry and update the TLB with the new page */
-	evicted = 0;
 	for (i = 0; i < tlb_size; i++)
 	{
 		/* Get the first invalid entry */
@@ -79,8 +78,7 @@ pfn_t tlb_lookup(vpn_t vpn, int write)
 			if (write)
 				SET_BIT(tlb[i].flags, DIRTY);
 			
-			evicted = 1;
-			break;
+			return pfn;
 		}
 	}
 	
@@ -96,7 +94,7 @@ pfn_t tlb_lookup(vpn_t vpn, int write)
 	 * Repeat the for STEPS till we find a victim entry to kick out. 
 	 */
 	
-	while (evicted != 1)
+	while (1)
 	{
 		for (i = 0; i < tlb_size; i++)
 		{
@@ -112,7 +110,6 @@ pfn_t tlb_lookup(vpn_t vpn, int write)
 			else
 			{
 				CLEAR_BIT(tlb[i].flags, USED);
-				CLEAR_BIT(tlb[i].flags, VALID);
 			}
 		}
 	}

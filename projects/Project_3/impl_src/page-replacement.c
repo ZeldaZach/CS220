@@ -5,7 +5,6 @@
 #include "global.h"
 #include "process.h"
 #include "macros.h"
-#include <stdio.h>
 
 /*******************************************************************************
  * Finds a free physical frame. If none are available, uses a clock sweep
@@ -18,45 +17,42 @@
 pfn_t get_free_frame(void)
 {
 	pfn_t pfn;
-	int i, cont;
-
-	cont = 1;
+	int i;
 	
 	/* TASK 4a: Iterate through the reverse lookup table to see if there is a free frame. If so, return it. 
 	 * HINT: The pcb (or the owning process) for a free frame will be NULL. 
 	 */
-	
+
 	/* For each entry in the rlt, see if we have an empty one */
-	for (i = 0; i < CPU_NUM_PTE; i++)
+	for (i = 0; i < NUM_PHYS_PAGES; i++)
 		if (rlt[i].pcb == NULL)
-			return (pfn_t)i; 
+			return (pfn_t)i;
 
 	/* TASK 4b: If none of the frames are free, we must evict a frame.
-	 * For each frame, if it is used, set it as unused. If it is already unused, return the frame. 
-	 * Repeat the previous step till you find an unused frame. 
-	 */ 
-	
+	 * For each frame, if it is used, set it as unused. If it is already
+unused, return the frame.
+	 * Repeat the previous step till you find an unused frame.
+	 */
+
 	/* Loop around looking for an empty page frame, once found return it */
-	while (cont)
+	while (1)
 	{
-		for (i = 0; i < CPU_NUM_PTE; i++)
-		{	
+		for (i = 0; i < NUM_PHYS_PAGES; i++)
+		{
 			if (IS_SET(rlt[i].pcb->pagetable[rlt[i].vpn].flags, USED))
 			{
 				CLEAR_BIT(rlt[i].pcb->pagetable[rlt[i].vpn].flags, USED);
 			}
 			else
 			{
-
 				pfn = current_pagetable[i].pfn;
 				return pfn;
 			}
 		}
 	}
 
-	/* This final return is just to satisfy the compiler. 
-	 * Control should never reach here. We should have found a frame earlier. 
+	/* This final return is just to satisfy the compiler.
+	 * Control should never reach here. We should have found a frame earlier.
 	 */
 	return pfn;
-
 }
