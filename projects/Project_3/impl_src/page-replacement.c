@@ -5,6 +5,7 @@
 #include "global.h"
 #include "process.h"
 #include "macros.h"
+#include <stdio.h>
 
 /*******************************************************************************
  * Finds a free physical frame. If none are available, uses a clock sweep
@@ -26,7 +27,7 @@ pfn_t get_free_frame(void)
 	 */
 	
 	/* For each entry in the rlt, see if we have an empty one */
-	for (i = 0; i < NUM_PHYS_PAGES; i++)
+	for (i = 0; i < CPU_NUM_PTE; i++)
 		if (rlt[i].pcb == NULL)
 			return (pfn_t)i; 
 
@@ -38,15 +39,16 @@ pfn_t get_free_frame(void)
 	/* Loop around looking for an empty page frame, once found return it */
 	while (cont)
 	{
-		for (i = 0; i < NUM_PHYS_PAGES; i++)
+		for (i = 0; i < CPU_NUM_PTE; i++)
 		{	
-			if (IS_SET(rlt[i].pcb->pagetable[rlt[i].vpn].flags, VALID))
+			if (IS_SET(rlt[i].pcb->pagetable[rlt[i].vpn].flags, USED))
 			{
-				CLEAR_BIT(rlt[i].pcb->pagetable[rlt[i].vpn].flags, VALID);
+				CLEAR_BIT(rlt[i].pcb->pagetable[rlt[i].vpn].flags, USED);
 			}
 			else
 			{
-				pfn = rlt[i].pcb->pagetable[rlt[i].vpn].pfn;
+
+				pfn = current_pagetable[i].pfn;
 				return pfn;
 			}
 		}

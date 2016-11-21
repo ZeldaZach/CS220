@@ -23,19 +23,11 @@
 pfn_t pagefault_handler(vpn_t request_vpn, int write)
 {
 	pfn_t victim_pfn;
-	int i;
 	victim_pfn = 0;
-	
+
 	/* TASK 5a: Find a victim frame. Hint: Refer page-replacement.c.  */
 	/* Use the reverse lookup table to find the victim's owner process and corresponding virtual page. */
-	for (i = 0; i < NUM_PHYS_PAGES; i++)
-	{
-		if (rlt[i].pcb == NULL)
-		{
-			victim_pfn = (pfn_t)i;
-			break;
-		}
-	}
+	victim_pfn = get_free_frame();
 
 	/*
 	 * TASK 5b: If victim page is occupied:
@@ -44,19 +36,18 @@ pfn_t pagefault_handler(vpn_t request_vpn, int write)
 	 * 2) Invalidate the page's entry in the victim's page table.
 	 * 3) Clear the victim page's TLB entry (hint: tlb_clearone()).
 	 */
-	
+
 	if (rlt[victim_pfn].pcb)
 	{
 		if (IS_SET(rlt[victim_pfn].pcb->pagetable[rlt[victim_pfn].vpn].flags, DIRTY))
-		{
 			page_to_disk(victim_pfn, rlt[victim_pfn].vpn, rlt[victim_pfn].pcb->pid);
-			CLEAR_BIT(rlt[victim_pfn].pcb->pagetable[rlt[victim_pfn].vpn].flags, VALID);
-			tlb_clearone(rlt[victim_pfn].vpn);
-		}
+
+		CLEAR_BIT(rlt[victim_pfn].pcb->pagetable[rlt[victim_pfn].vpn].flags, VALID);
+		tlb_clearone(rlt[victim_pfn].vpn);
 	}
 
-	/* TASK 5c: Update the reverse lookup table so that the frame's ownership is updated to the requesting process (which is nothing but the current process!). 
-	 * Update the requesting process' page table. Set the page table entry as used and valid. Also, if writing to the page, set the dirty bit. 
+	/* TASK 5c: Update the reverse lookup table so that the frame's ownership is updated to the requesting process (which is nothing but the current process!).
+	 * Update the requesting process' page table. Set the page table entry as used and valid. Also, if writing to the page, set the dirty bit.
 	 *
 	 * Finally, retrieve the page from disk. Note that is really a lie: we save pages in
 	 * memory (since doing file I/O for this simulation would be annoying and
@@ -65,17 +56,19 @@ pfn_t pagefault_handler(vpn_t request_vpn, int write)
 	 * blank page. Real systems would check for invalid pages and possibly read
 	 * stuff like code pages from disk. For purposes of this simulation, we won't
 	 * worry about that. =)
-	 * Hint: page_from_disk() 
+	 * Hint: page_from_disk()
 	 */
 	rlt[victim_pfn].pcb = current;
 	
-	SET_BIT(current->pagetable->flags, USED);
-	SET_BIT(current->pagetable->flags, VALID);
-	
+	current_pagetable[request_vpn].pfn = victim_pfn;
+
+	SET_BIT(current_pagetable[request_vpn].flags, USED);
+	SET_BIT(current_pagetable[request_vpn].flags, VALID);
+
 	if (write)
-		SET_BIT(current->pagetable->flags, DIRTY);
-	
-	page_from_disk(get_free_frame(), rlt[victim_pfn].vpn, rlt[victim_pfn].pcb->pid);
+		SET_BIT(rlt[victim_pfn].pcb->pagetable->flags, DIRTY);
+
+	page_from_disk(victim_pfn, request_vpn, current->pid);
 
 	return victim_pfn;
 }

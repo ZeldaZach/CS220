@@ -36,33 +36,27 @@ pfn_t tlb_lookup(vpn_t vpn, int write)
 	 * 	  If this is a write access, also set the dirty bit. 
 	 * 	  We have found the physical page, so we are done. Return the physical page. 
 	 */
-	
+
 	/* For each entry in the tlb */
 	for (i = 0; i < tlb_size; i++)
 	{
 		/* if valid == true */
-		if (IS_SET(tlb[i].flags, VALID))
+		if (IS_SET(tlb[i].flags, VALID) && tlb[i].vpn == vpn)
 		{
-			/* if tlb->vpn == lookup vpn */
-			if (tlb[i].vpn == vpn)
-			{
-				/* Increment tlbhits since it was a hit */
-				tlbhits_count++;
+			/* Increment tlbhits since it was a hit */
+			tlbhits_count++;
 
-				/* if write is enabled, set write flag */
-				if (write)
-					SET_BIT(tlb[i].flags, DIRTY);
+			/* if write is enabled, set write flag */
+			if (write)
+				SET_BIT(tlb[i].flags, DIRTY);
 
-				/* set used flag */
-				SET_BIT(tlb[i].flags, USED);
-				
-				/* set pfn */
-				pfn = tlb[i].pfn;
-			}
-
-			/* if pfn is not null */
-			if (pfn)
-				return pfn;
+			/* set used flag */
+			SET_BIT(tlb[i].flags, USED);
+			
+			/* set pfn */
+			pfn = tlb[i].pfn;
+			
+			return pfn;
 		}
 	}
 
@@ -77,11 +71,13 @@ pfn_t tlb_lookup(vpn_t vpn, int write)
 		/* Get the first invalid entry */
 		if (!(IS_SET(tlb[i].flags, VALID)))
 		{
-			tlb_clearone(tlb[i].vpn);
-
 			tlb[i].vpn = vpn;
 			tlb[i].pfn = pfn;
 			SET_BIT(tlb[i].flags, VALID);
+			SET_BIT(tlb[i].flags, USED);
+			
+			if (write)
+				SET_BIT(tlb[i].flags, DIRTY);
 			
 			evicted = 1;
 			break;
@@ -100,7 +96,7 @@ pfn_t tlb_lookup(vpn_t vpn, int write)
 	 * Repeat the for STEPS till we find a victim entry to kick out. 
 	 */
 	
-	while (!evicted)
+	while (evicted != 1)
 	{
 		for (i = 0; i < tlb_size; i++)
 		{
@@ -110,11 +106,12 @@ pfn_t tlb_lookup(vpn_t vpn, int write)
 				tlb[i].pfn = pfn;
 				SET_BIT(tlb[i].flags, USED);
 				SET_BIT(tlb[i].flags, VALID);
-				evicted = 1;
-				break;
+
+				return pfn;
 			}
 			else
 			{
+				CLEAR_BIT(tlb[i].flags, USED);
 				CLEAR_BIT(tlb[i].flags, VALID);
 			}
 		}
