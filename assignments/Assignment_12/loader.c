@@ -2,12 +2,10 @@
 #include <stdlib.h>
 #include <sys/mman.h>
 
-#define FILE_SIZE 99 /* Size of func.bin */
-
 int main(int argc, char *argv[])
 {
 	FILE *fp;
-	unsigned int num1, num2, result;
+	unsigned int num1, num2, result, file_size;
 	unsigned char *raw_bytes, operation;
 	typedef int (*Calc_fptr)(char, int, int);
 	Calc_fptr calculator;
@@ -20,21 +18,29 @@ int main(int argc, char *argv[])
 
 	/* Open/read binary file */
 	fp = fopen(argv[1], "rb");
-	
+
+	/* If binary file does not exist, exit */
 	if (!fp)
 	{
 		printf("File not found\n");
 		exit(1);
 	}
 
-	/* Malloc for raw_bytes */
-	raw_bytes = malloc(FILE_SIZE);
-	mprotect(raw_bytes, FILE_SIZE, PROT_EXEC);
-	mprotect(raw_bytes, FILE_SIZE, PROT_READ);
-	mprotect(raw_bytes, FILE_SIZE, PROT_WRITE);
+	/* Get sizeof(input_file) */
+	fseek(fp, 0, SEEK_END);
+	file_size = ftell(fp);
+	fseek(fp, 0, SEEK_SET);
+
+	/* Malloc for raw_bytes & allow us to write into that area */
+	raw_bytes = malloc(file_size);
+	mprotect(raw_bytes, file_size, PROT_WRITE);
 
 	/* Read file into buffer */
-	fread(raw_bytes, FILE_SIZE, 1, fp);
+	fread(raw_bytes, file_size, 1, fp);
+
+	/* Make written area readable/executable */
+	mprotect(raw_bytes, file_size, PROT_EXEC);
+	mprotect(raw_bytes, file_size, PROT_READ);
 
 	/* Cast args appropriately */
 	num1 = atoi(argv[2]);
@@ -43,10 +49,10 @@ int main(int argc, char *argv[])
 
 	/* Cast buffer to the calculator() func */
 	calculator = (Calc_fptr)raw_bytes;
-	
-	/* Print results */
+
+	/* Activate calculator and print results */
 	result = calculator(operation, num1, num2);
-	/*printf("%u %c %u = %u\n", num1, operation, num2);*/
+	printf("%u %c %u = %u\n", num1, operation, num2, result);
 
 	return 0;
 }
