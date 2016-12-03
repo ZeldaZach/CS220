@@ -1,0 +1,58 @@
+fork.c
+1) The ordering is inconcsistant because it's possible the parent 
+finishes execution before the child or vice versa. We cannot know the 
+relative ordering of their execution unless we include some kind of 
+delay or wait().
+
+2) When the 1 second delay is added via sleep(1) to the parent else 
+statement, the child will execute before the parent now in all cases. 
+There is a non-trivial amount of time that each process takes, but 1 
+second is much longer then the time the child takes, so the child will 
+always execute first in this instance.
+
+3) child getpid() = 19774, parent getpid() = 19773
+
+4) child getppid() = 19814, parent getppid() = 19581
+
+5) child x = 2, parent x = 0. The last value is 0 and not 1 because a 
+fork'd process makes a copy of the situation and they act independently. 
+The parent will still have x = 1 and then call x-- whereas the child 
+will have its own x = 1 adn then call x++.
+
+multifork.c
+1) line1 = 2 prints, line2 = 4 prints, line3 = 4 prints, line4 = 4 
+prints. line1 prints only twice because a fork is called above it, which 
+copies the state the program is in then makes a new process of the same 
+type. So line1 gets printed in the first fork and the original process. 
+line two will get printed these same two two times, and there's an 
+additional fork before line2 prints so it will print an additional two 
+times as there are 3 child processes and the original parent at this 
+point. Line3 and line4 print 4 times each because there's a check for 
+the new child process that's made by the 3rd fork(), which results in an 
+additional child process being created. This is done numerous times so 
+we have 4 child's of this type and 4 parents of this type print out.
+
+2) 
+19962: 19581: Line 1
+19962: 19581: Line 2
+19963: 19962: Line 1
+19962: 19581: Line 4
+19963: 19962: Line 2
+19963: 1: Line 4
+zhalper3:halpern_lab13 $ 19967: 1: Line 3
+19964: 1: Line 2
+19966: 1: Line 2
+19965: 1: Line 3
+19964: 1: Line 4
+19968: 1: Line 3
+19966: 1: Line 4
+19969: 1: Line 3
+
+The parentid for some of these processes is 1 because the original 
+parent process has completed execution at this time (hence why you see 
+my $PS1 appear) and at this point each child process is an orphan'd 
+process... so the init() takes it over, which has pid of 1.
+
+exec.c
+1) Child pid = 20031, parent pid = 20030. My pid is 20031, parent pid is 
+20030.
