@@ -8,7 +8,7 @@ delay or wait().
 statement, the child will execute before the parent now in all cases. 
 There is a non-trivial amount of time that each process takes, but 1 
 second is much longer then the time the child takes, so the child will 
-always execute first in this instance.
+always execute and finish first in this instance.
 
 3) child getpid() = 19774, parent getpid() = 19773
 
